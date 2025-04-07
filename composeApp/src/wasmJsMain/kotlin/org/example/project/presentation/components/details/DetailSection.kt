@@ -10,11 +10,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import org.example.project.domain.alert
-import org.example.project.domain.model.Gender
-import org.example.project.domain.model.Student
-import org.example.project.domain.model.StudentStatus
-import org.example.project.domain.model.toDepartment
+import org.example.project.domain.model.student.Gender
+import org.example.project.domain.model.student.Student
+import org.example.project.domain.model.student.StudentStatus
+import org.example.project.domain.model.student.toDepartment
 import org.example.project.domain.toLocalDateTime
 import org.example.project.domain.toTriple
 import org.example.project.presentation.components.ButtonIcon

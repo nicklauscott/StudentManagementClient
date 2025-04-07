@@ -1,7 +1,7 @@
-package org.example.project.domain.mapper
+package org.example.project.domain.mapper.student
 
-import org.example.project.data.remote.response.CourseDTO
-import org.example.project.domain.model.Course
+import org.example.project.data.remote.response.student.CourseDTO
+import org.example.project.domain.model.student.Course
 
 fun Course.toDTO(): CourseDTO = CourseDTO(
     courseCode = courseCode,

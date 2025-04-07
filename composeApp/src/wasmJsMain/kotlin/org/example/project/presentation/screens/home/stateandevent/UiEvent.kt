@@ -1,6 +1,6 @@
 package org.example.project.presentation.screens.home.stateandevent
 
-import org.example.project.domain.model.Student
+import org.example.project.domain.model.student.Student
 
 
 sealed interface UiEvent {

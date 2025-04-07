@@ -1,9 +1,9 @@
-package org.example.project.domain.mapper
+package org.example.project.domain.mapper.student
 
-import org.example.project.data.remote.response.StudentDTO
-import org.example.project.domain.model.Gender
-import org.example.project.domain.model.Student
-import org.example.project.domain.model.StudentStatus
+import org.example.project.data.remote.response.student.StudentDTO
+import org.example.project.domain.model.student.Gender
+import org.example.project.domain.model.student.Student
+import org.example.project.domain.model.student.StudentStatus
 
 fun Student.toDTO(): StudentDTO = StudentDTO(
     address = address,

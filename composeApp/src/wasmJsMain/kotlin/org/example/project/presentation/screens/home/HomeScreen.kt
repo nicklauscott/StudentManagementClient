@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.browser.window
-import org.example.project.domain.model.Student
+import org.example.project.domain.model.student.Student
 import org.example.project.presentation.components.*
 import org.example.project.presentation.components.details.DetailSection
 import org.example.project.presentation.screens.home.components.*

@@ -4,19 +4,27 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import org.example.project.data.remote.response.CourseDTO
-import org.example.project.data.remote.response.ResponseDTO
-import org.example.project.data.remote.response.StudentDTO
+import org.example.project.data.remote.response.student.CourseDTO
+import org.example.project.data.remote.response.student.ResponseDTO
+import org.example.project.data.remote.response.student.StudentDTO
+import org.example.project.domain.alert
 import org.example.project.domain.constant.Response
-import org.example.project.domain.mapper.toCourse
-import org.example.project.domain.mapper.toPagingAndSorting
-import org.example.project.domain.mapper.toStudent
-import org.example.project.domain.model.Course
-import org.example.project.domain.model.PagingAndSort
-import org.example.project.domain.model.Student
-import org.example.project.domain.repository.Repository
+import org.example.project.domain.constant.TokenType
+import org.example.project.domain.mapper.student.toCourse
+import org.example.project.domain.mapper.student.toPagingAndSorting
+import org.example.project.domain.mapper.student.toStudent
+import org.example.project.domain.model.student.Course
+import org.example.project.domain.model.student.PagingAndSort
+import org.example.project.domain.model.student.Student
+import org.example.project.domain.repository.AuthRepository
+import org.example.project.domain.repository.AuthTokenRepository
+import org.example.project.domain.repository.StudentRepository
 
-class RepositoryImpl(private val client: HttpClient): Repository {
+class StudentRepositoryImpl(
+    private val client: HttpClient,
+    private  val authTokenRepository: AuthTokenRepository,
+    private val authRepository: AuthRepository
+): StudentRepository {
 
     private val baseUrl = "http://localhost:8080/v1/students"
 
@@ -26,7 +34,15 @@ class RepositoryImpl(private val client: HttpClient): Repository {
         return try {
             val response = client.request(
                 "$baseUrl/advance?page=$page&size=$size&sortBy=$sortBy&orderType=$orderBy"
-            ) { method = HttpMethod.Get }
+            ) {
+                method = HttpMethod.Get
+                headers {
+                    append(
+                        HttpHeaders.Authorization,
+                        "Bearer ${authTokenRepository.getAuthToken(TokenType.ACCESS)}"
+                    )
+                }
+            }
 
             if (response.status != HttpStatusCode.OK) {
                 return Response.Failure("Student not found!")
@@ -37,7 +53,7 @@ class RepositoryImpl(private val client: HttpClient): Repository {
             val students = responseDto.content.map { it.toStudent() }
 
             Response.Success(data = pagingAndSort to students)
-        } catch (_: Exception) {
+        } catch (ex: Exception) {
             Response.Failure("Unknown error!")
         }
     }

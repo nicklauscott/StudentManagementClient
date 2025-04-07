@@ -1,12 +1,12 @@
 package org.example.project.domain.repository
 
-import org.example.project.data.remote.response.StudentDTO
+import org.example.project.data.remote.response.student.StudentDTO
 import org.example.project.domain.constant.Response
-import org.example.project.domain.model.Course
-import org.example.project.domain.model.PagingAndSort
-import org.example.project.domain.model.Student
+import org.example.project.domain.model.student.Course
+import org.example.project.domain.model.student.PagingAndSort
+import org.example.project.domain.model.student.Student
 
-interface Repository {
+interface StudentRepository {
     suspend fun getStudents(
         page: Int, size: Int, sortBy: String, orderBy: String
     ): Response<Pair<PagingAndSort, List<Student>>>

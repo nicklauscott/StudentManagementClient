@@ -1,4 +1,4 @@
-package org.example.project.data.remote.response
+package org.example.project.data.remote.response.student
 
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable

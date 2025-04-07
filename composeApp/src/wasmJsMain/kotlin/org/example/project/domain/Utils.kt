@@ -1,8 +1,8 @@
 package org.example.project.domain
 
 import kotlinx.datetime.LocalDateTime
-import org.example.project.domain.model.Course
-import org.example.project.domain.model.Student
+import org.example.project.domain.model.student.Course
+import org.example.project.domain.model.student.Student
 
 fun List<Student>.getUniqueCourses(): Set<Course> {
     val courses = mutableListOf<Course>()

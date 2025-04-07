@@ -1,4 +1,4 @@
-package org.example.project.domain.model
+package org.example.project.domain.model.student
 
 import kotlinx.datetime.LocalDateTime
 
@@ -43,7 +43,9 @@ enum class Department(val programs: List<String>) {
 fun toDepartment(string: String): Department {
     return try {
         Department.valueOf(string.replace(" ", "_"))
-    } catch (_: Exception) { Department.None }
+    } catch (_: Exception) {
+        Department.None
+    }
 }
 
 

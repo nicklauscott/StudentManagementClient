@@ -8,7 +8,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.example.project.domain.model.*
+import org.example.project.domain.model.student.Department
+import org.example.project.domain.model.student.Student
+import org.example.project.domain.model.student.StudentStatus
 import org.example.project.presentation.components.CustomDatePicker
 import org.example.project.presentation.components.CustomEnhanceDropDownMenu
 import org.example.project.presentation.screens.home.components.InfoCell

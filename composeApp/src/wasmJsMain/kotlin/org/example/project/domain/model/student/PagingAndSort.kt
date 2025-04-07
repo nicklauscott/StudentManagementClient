@@ -1,4 +1,4 @@
-package org.example.project.domain.model
+package org.example.project.domain.model.student
 
 data class PagingAndSort(
     val page: Int = 0,

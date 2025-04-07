@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.example.project.domain.model.Gender
-import org.example.project.domain.model.Student
+import org.example.project.domain.model.student.Gender
+import org.example.project.domain.model.student.Student
 import org.example.project.presentation.components.CustomDatePicker
 import org.example.project.presentation.components.CustomEnhanceDropDownMenu
 import org.example.project.presentation.components.EnhacedTextAndTextFieldCell

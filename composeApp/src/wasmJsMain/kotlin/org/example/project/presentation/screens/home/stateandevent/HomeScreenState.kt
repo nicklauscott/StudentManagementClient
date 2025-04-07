@@ -1,9 +1,9 @@
 package org.example.project.presentation.screens.home.stateandevent
 
 import org.example.project.domain.getUniqueCourses
-import org.example.project.domain.model.Course
-import org.example.project.domain.model.PagingAndSort
-import org.example.project.domain.model.Student
+import org.example.project.domain.model.student.Course
+import org.example.project.domain.model.student.PagingAndSort
+import org.example.project.domain.model.student.Student
 
 data class HomeScreenState(
     val students: List<Student> = emptyList(),

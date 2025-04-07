@@ -6,13 +6,15 @@ import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.*
 import org.example.project.domain.alert
 import org.example.project.domain.constant.Response
-import org.example.project.domain.mapper.toDTO
-import org.example.project.domain.model.Student
-import org.example.project.domain.repository.Repository
+import org.example.project.domain.constant.TokenType
+import org.example.project.domain.mapper.student.toDTO
+import org.example.project.domain.model.student.Student
+import org.example.project.domain.repository.AuthTokenRepository
+import org.example.project.domain.repository.StudentRepository
 import org.example.project.presentation.screens.home.stateandevent.HomeScreenState
 import org.example.project.presentation.screens.home.stateandevent.UiEvent
 
-class HomeScreenManager(private val repository: Repository) {
+class HomeScreenManager(private val studentRepository: StudentRepository) {
 
     private val _homeScreenState: MutableState<HomeScreenState> = mutableStateOf(HomeScreenState())
     val homeScreenState: State<HomeScreenState> = _homeScreenState
@@ -48,7 +50,7 @@ class HomeScreenManager(private val repository: Repository) {
                 homeScreenState.value.allCourse.find { it.courseCode == courseCode }
             }
             homeScreenState.value.activeStudent?.id?.let {
-                val response = repository.registerCourseForStudent(it.toLong(), courses)
+                val response = studentRepository.registerCourseForStudent(it.toLong(), courses)
 
                 if (response is Response.Failure) {
                     _homeScreenState.value = homeScreenState.value.copy(
@@ -81,7 +83,7 @@ class HomeScreenManager(private val repository: Repository) {
     private fun updateStudent(student: Student) {
         _homeScreenState.value = homeScreenState.value.copy(updatingStudent = true)
         scope.launch {
-            val response = repository.updateStudent(student.toDTO())
+            val response = studentRepository.updateStudent(student.toDTO())
             if (response is Response.Failure) {
                 _homeScreenState.value = homeScreenState.value.copy(
                     updatingStudent = false,
@@ -121,7 +123,7 @@ class HomeScreenManager(private val repository: Repository) {
     private fun fetchAllStudents() {
         _homeScreenState.value = homeScreenState.value.copy(fetchingStudents = true)
         scope.launch {
-            val response = repository.getStudents(
+            val response = studentRepository.getStudents(
                 page = homeScreenState.value.pagingAndSort.page,
                 homeScreenState.value.pagingAndSort.size,
                 sortBy = homeScreenState.value.pagingAndSort.sortBy,

@@ -16,8 +16,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.example.project.domain.model.Student
-import org.example.project.domain.model.StudentStatus
+import org.example.project.domain.model.student.Student
+import org.example.project.domain.model.student.StudentStatus
 import org.example.project.presentation.theme.LocalAppTheme
 
 @Composable

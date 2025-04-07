@@ -50,6 +50,7 @@ kotlin {
 
             implementation(libs.ktor.core)
             implementation(libs.ktor.cio)
+            implementation(libs.ktor.auth)
             implementation(libs.ktor.content.negotiation) // ktor-content-negotiation
             implementation(libs.ktor.serialization.json) // ktor-serialization-json
 
