@@ -3,13 +3,14 @@ package org.example.project.presentation.screens.home
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.example.project.domain.alert
 import org.example.project.domain.constant.Response
-import org.example.project.domain.constant.TokenType
 import org.example.project.domain.mapper.student.toDTO
 import org.example.project.domain.model.student.Student
-import org.example.project.domain.repository.AuthTokenRepository
 import org.example.project.domain.repository.StudentRepository
 import org.example.project.presentation.screens.home.stateandevent.HomeScreenState
 import org.example.project.presentation.screens.home.stateandevent.UiEvent
@@ -89,7 +90,8 @@ class HomeScreenManager(private val studentRepository: StudentRepository) {
                     updatingStudent = false,
                     updatingStudentWasSuccessful = false
                 )
-                alert("Error!. Failed to update student")
+                val errorMessage = response.messages.joinToString("\n")
+                alert("Error!. Failed to update student\n$errorMessage")
                 return@launch
             }
 
@@ -132,7 +134,7 @@ class HomeScreenManager(private val studentRepository: StudentRepository) {
             if (response is Response.Failure) {
                 _homeScreenState.value = homeScreenState.value.copy(
                     fetchingStudents = false,
-                    errorFetchingStudents = response.message
+                    errorFetchingStudents = response.messages.firstOrNull()
                 )
                 return@launch
             }

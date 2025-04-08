@@ -7,24 +7,17 @@ import io.ktor.http.*
 import org.example.project.data.remote.response.student.CourseDTO
 import org.example.project.data.remote.response.student.ResponseDTO
 import org.example.project.data.remote.response.student.StudentDTO
-import org.example.project.domain.alert
+import org.example.project.data.remote.response.student.StudentFailureResponse
 import org.example.project.domain.constant.Response
-import org.example.project.domain.constant.TokenType
 import org.example.project.domain.mapper.student.toCourse
 import org.example.project.domain.mapper.student.toPagingAndSorting
 import org.example.project.domain.mapper.student.toStudent
 import org.example.project.domain.model.student.Course
 import org.example.project.domain.model.student.PagingAndSort
 import org.example.project.domain.model.student.Student
-import org.example.project.domain.repository.AuthRepository
-import org.example.project.domain.repository.AuthTokenRepository
 import org.example.project.domain.repository.StudentRepository
 
-class StudentRepositoryImpl(
-    private val client: HttpClient,
-    private  val authTokenRepository: AuthTokenRepository,
-    private val authRepository: AuthRepository
-): StudentRepository {
+class StudentRepositoryImpl(private val client: HttpClient): StudentRepository {
 
     private val baseUrl = "http://localhost:8080/v1/students"
 
@@ -34,18 +27,10 @@ class StudentRepositoryImpl(
         return try {
             val response = client.request(
                 "$baseUrl/advance?page=$page&size=$size&sortBy=$sortBy&orderType=$orderBy"
-            ) {
-                method = HttpMethod.Get
-                headers {
-                    append(
-                        HttpHeaders.Authorization,
-                        "Bearer ${authTokenRepository.getAuthToken(TokenType.ACCESS)}"
-                    )
-                }
-            }
+            ) { method = HttpMethod.Get }
 
             if (response.status != HttpStatusCode.OK) {
-                return Response.Failure("Student not found!")
+                return Response.Failure(listOf("Student not found!"))
             }
 
             val responseDto = response.body<ResponseDTO>()
@@ -54,37 +39,35 @@ class StudentRepositoryImpl(
 
             Response.Success(data = pagingAndSort to students)
         } catch (ex: Exception) {
-            Response.Failure("Unknown error!")
+            Response.Failure(listOf("Unknown error!"))
         }
     }
 
     override suspend fun getStudent(id: Long): Response<Student> {
         return try {
-            val response = client.request("$baseUrl/$id") {
-                method = HttpMethod.Get
-            }
+            val response = client.request("$baseUrl/$id") { method = HttpMethod.Get }
 
-            if (response.status != HttpStatusCode.OK) {
-                return Response.Failure("Student not found!")
+            if (response.status == HttpStatusCode.NotFound) {
+                val error = response.body<StudentFailureResponse>()
+                return Response.Failure(error.errors)
             }
             Response.Success(data = response.body<StudentDTO>().toStudent())
         } catch (_: Exception) {
-            Response.Failure("Unknown error!")
+            Response.Failure(listOf("Unknown error!"))
         }
     }
 
     override suspend fun getStudentsCourse(id: Long): Response<List<Course>> {
         return try {
-            val response = client.request("$baseUrl/$id/courses") {
-                method = HttpMethod.Get
-            }
+            val response = client.request("$baseUrl/$id/courses") { method = HttpMethod.Get }
 
-            if (response.status != HttpStatusCode.OK) {
-                return Response.Failure("Student not found!")
+            if (response.status == HttpStatusCode.NotFound) {
+                val error = response.body<StudentFailureResponse>()
+                return Response.Failure(error.errors)
             }
             Response.Success(data = response.body<List<CourseDTO>>().map { it.toCourse() })
         } catch (_: Exception) {
-            Response.Failure("Unknown error!")
+            Response.Failure(listOf("Unknown error!"))
         }
     }
 
@@ -99,12 +82,17 @@ class StudentRepositoryImpl(
                 setBody(student)
             }
 
+            if (response.status == HttpStatusCode.BadRequest) {
+                val failedResponse = response.body<StudentFailureResponse>()
+                return Response.Failure(failedResponse.errors)
+            }
+
             if (response.status != HttpStatusCode.OK) {
-                return Response.Failure("Failed to create a Student!")
+                return Response.Failure(listOf("Failed to create a Student!"))
             }
             Response.Success(data = response.body<StudentDTO>().toStudent())
         } catch (_: Exception) {
-            Response.Failure("Unknown error!")
+            Response.Failure(listOf("Unknown error!"))
         }
     }
 
@@ -119,12 +107,17 @@ class StudentRepositoryImpl(
                 setBody(student)
             }
 
+            if (response.status == HttpStatusCode.BadRequest) {
+                val failedResponse = response.body<StudentFailureResponse>()
+                return Response.Failure(failedResponse.errors)
+            }
+
             if (response.status != HttpStatusCode.OK) {
-                return Response.Failure("Failed to create a Student!")
+                return Response.Failure(listOf("Failed to create a Student!"))
             }
                 Response.Success(data = response.body<StudentDTO>().toStudent())
-        } catch (_: Exception) {
-            Response.Failure("Unknown error!")
+        } catch (ex: Exception) {
+            Response.Failure(listOf("Unknown error!"))
         }
 
     }
@@ -141,12 +134,12 @@ class StudentRepositoryImpl(
             }
 
             if (response.status != HttpStatusCode.OK) {
-                return Response.Failure("Failed to register courses to Student!")
+                return Response.Failure(listOf("Failed to register courses to Student!"))
             }
             Response.Success(data = response.body<StudentDTO>().toStudent())
         } catch (_: Exception) {
 
-            Response.Failure("Unknown error!")
+            Response.Failure(listOf("Unknown error!"))
         }
     }
 }

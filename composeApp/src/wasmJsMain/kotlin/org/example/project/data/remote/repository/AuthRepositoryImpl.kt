@@ -49,7 +49,7 @@ class AuthRepositoryImpl(
                 setBody(loginRequest)
             }
 
-            if (response.status != HttpStatusCode.BadRequest) {
+            if (response.status == HttpStatusCode.BadRequest) {
                 val result = response.body<BadRequest>()
                 return AuthResponse.RegistrationFailure(result.errors)
             }
@@ -57,8 +57,6 @@ class AuthRepositoryImpl(
             val authTokeDTO = response.body<AuthTokeDTO>()
             authTokenRepository.saveAuthToken(TokenType.ACCESS, authTokeDTO.accessToken)
             authTokenRepository.saveAuthToken(TokenType.REFRESH, authTokeDTO.refreshToken)
-
-
 
             AuthResponse.LoginSuccessful
         } catch (_: Exception) {
