@@ -73,6 +73,6 @@ val module = module {
 
     factory<AuthRepository> { AuthRepositoryImpl(get(), get()) }
 
-    single { HomeScreenManager(get()) }
+    factory { HomeScreenManager(get()) }
 
 }
