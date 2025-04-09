@@ -9,7 +9,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.example.project.presentation.screens.home.components.InfoCell
 import org.example.project.presentation.theme.LocalAppTheme
 
 @Composable

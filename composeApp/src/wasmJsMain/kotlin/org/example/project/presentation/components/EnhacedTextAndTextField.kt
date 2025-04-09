@@ -16,16 +16,19 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.example.project.presentation.screens.home.components.InfoCell
 import org.example.project.presentation.theme.LocalAppTheme
 
 @Composable
 fun EnhacedTextAndTextFieldCell(
     modifier: Modifier,
-    id: Int, label: String, textState: String, canEdit: Boolean,
+    id: Int, label: String, textState: String,
+    isPassword: Boolean = false, canEdit: Boolean,
     singleLine: Boolean, onTextChange: (String) -> Unit = {},
     errorAndSuccess: () -> Pair<Boolean, Boolean>
 ) {
@@ -37,15 +40,15 @@ fun EnhacedTextAndTextFieldCell(
         InfoCell(text = label, style = MaterialTheme.typography.subtitle2, color = appTheme.colors.textOnMainBg)
         Spacer(modifier = Modifier.height(2.dp))
         EnhancedTextField(
-            id = id, label = label, textState = textState, canEdit = canEdit, singleLine = singleLine,
-            onTextChange = onTextChange, errorAndSuccess = errorAndSuccess
+            id = id, label = label, textState = textState, isPassword = isPassword, canEdit = canEdit,
+            singleLine = singleLine, onTextChange = onTextChange, errorAndSuccess = errorAndSuccess
         )
     }
 }
 
 @Composable
 fun EnhancedTextField(
-    id: Int, label: String, textState: String, canEdit: Boolean = true,
+    id: Int, label: String, textState: String, isPassword: Boolean = false, canEdit: Boolean = true,
     singleLine: Boolean, onTextChange: (String) -> Unit, errorAndSuccess: () -> Pair<Boolean, Boolean>
 ) {
     val appTheme = LocalAppTheme.current
@@ -127,6 +130,7 @@ fun EnhancedTextField(
                     textAlign = TextAlign.Start,  // Align text to the start (left)
                     shadow = Shadow(color = appTheme.colors.textLabelOnMainBg, blurRadius = 1f) // Subtle shadow for text
                 ),
+                visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
                 singleLine = singleLine,
                 decorationBox = { innerTextField ->
                     Box(

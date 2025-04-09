@@ -13,7 +13,7 @@ import org.example.project.domain.model.student.Student
 import org.example.project.domain.model.student.StudentStatus
 import org.example.project.presentation.components.CustomDatePicker
 import org.example.project.presentation.components.CustomEnhanceDropDownMenu
-import org.example.project.presentation.screens.home.components.InfoCell
+import org.example.project.presentation.components.InfoCell
 import org.example.project.presentation.theme.LocalAppTheme
 
 @Composable

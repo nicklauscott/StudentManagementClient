@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.example.project.domain.model.student.Student
 import org.example.project.domain.model.student.StudentStatus
+import org.example.project.presentation.components.InfoCell
 import org.example.project.presentation.theme.LocalAppTheme
 
 @Composable
@@ -68,15 +69,6 @@ fun StudentCell(modifier: Modifier = Modifier, student: Student, onClick: (Int) 
                 StudentStatusCell(student.status)
             }
         }
-    }
-}
-
-@Composable
-fun InfoCell(text: String, style: TextStyle = MaterialTheme.typography.body2, color: Color = Color.White) {
-    Row(
-        modifier = Modifier.padding(vertical = 0.8.dp)
-    ) {
-        Text(text = text, style = style, color = color)
     }
 }
 

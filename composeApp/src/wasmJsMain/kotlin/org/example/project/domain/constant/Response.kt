@@ -8,7 +8,7 @@ interface Response<T> {
 
 interface AuthResponse {
     data class RegistrationFailure(val messages: List<String>): AuthResponse
-    data object RegistrationSuccessful: AuthResponse
+    data class RegistrationSuccessful(val email: String): AuthResponse
     data object LoginSuccessful: AuthResponse
-    data object LoginFailed: AuthResponse
+    data class LoginFailed(val messages: String): AuthResponse
 }

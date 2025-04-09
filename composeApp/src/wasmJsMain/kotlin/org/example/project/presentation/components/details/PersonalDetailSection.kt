@@ -13,7 +13,7 @@ import org.example.project.domain.model.student.Student
 import org.example.project.presentation.components.CustomDatePicker
 import org.example.project.presentation.components.CustomEnhanceDropDownMenu
 import org.example.project.presentation.components.EnhacedTextAndTextFieldCell
-import org.example.project.presentation.screens.home.components.InfoCell
+import org.example.project.presentation.components.InfoCell
 import org.example.project.presentation.theme.LocalAppTheme
 
 @Composable
@@ -49,7 +49,7 @@ fun PersonalDetailSection(
                 id = id, label = "First Name",
                 textState = firstNameTextState,
                 canEdit = canEdit,
-                singleLine = false,
+                singleLine = true,
                 onTextChange = onFnChange,
                 errorAndSuccess = fnErrorAndSuccess
             )
@@ -62,7 +62,7 @@ fun PersonalDetailSection(
                 id = id, label = "Last Name",
                 textState = lastNameTextState,
                 canEdit = canEdit,
-                singleLine = false,
+                singleLine = true,
                 onTextChange = onLnChange,
                 errorAndSuccess = lnErrorAndSuccess
             )
@@ -90,7 +90,7 @@ fun PersonalDetailSection(
                 id = id, label = "Email",
                 textState = emailTextState,
                 canEdit = canEdit,
-                singleLine = false,
+                singleLine = true,
                 onTextChange = onEmailChange,
                 errorAndSuccess = emailErrorAndSuccess
             )
@@ -103,7 +103,7 @@ fun PersonalDetailSection(
                 id = id, label = "Guardian Mobile",
                 textState = mobileTextState,
                 canEdit = canEdit,
-                singleLine = false,
+                singleLine = true,
                 onTextChange = onMobileChange,
                 errorAndSuccess = mobileErrorAndSuccess
             )

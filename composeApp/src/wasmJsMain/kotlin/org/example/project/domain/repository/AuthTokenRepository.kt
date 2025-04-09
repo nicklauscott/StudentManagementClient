@@ -6,5 +6,6 @@ interface AuthTokenRepository {
 
      fun saveAuthToken(type: TokenType, token: String)
      fun getAuthToken(type: TokenType): String?
+     fun deleteAuthToken(type: TokenType)
 
 }

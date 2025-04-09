@@ -25,6 +25,7 @@ import androidx.compose.ui.window.Dialog
 import org.example.project.domain.model.student.Course
 import org.example.project.presentation.components.ButtonIcon
 import org.example.project.presentation.components.HeaderText
+import org.example.project.presentation.components.InfoCell
 import org.example.project.presentation.theme.LocalAppTheme
 import org.jetbrains.compose.resources.painterResource
 import studentmanagementclient.composeapp.generated.resources.Res

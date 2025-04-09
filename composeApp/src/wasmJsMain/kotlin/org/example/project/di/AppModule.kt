@@ -14,22 +14,26 @@ import org.example.project.data.remote.repository.AuthRepositoryImpl
 import org.example.project.data.remote.repository.AuthRepositoryImpl.RefreshRequest
 import org.example.project.data.remote.repository.AuthTokenRepositoryImpl
 import org.example.project.data.remote.repository.StudentRepositoryImpl
-import org.example.project.data.remote.response.user.AuthTokeDTO
+import org.example.project.data.remote.response.user.LoginDTO
 import org.example.project.domain.constant.TokenType
 import org.example.project.domain.repository.AuthRepository
 import org.example.project.domain.repository.AuthTokenRepository
 import org.example.project.domain.repository.StudentRepository
 import org.example.project.presentation.screens.home.HomeScreenManager
+import org.example.project.presentation.screens.index.IndexScreenManager
+import org.example.project.presentation.screens.login.SignInAndSignUpScreenManager
+import org.example.project.presentation.screens.sidepanel.SidePanelScreenManager
 import org.koin.dsl.module
 
 
 val module = module {
 
-    val baseUrl = "http://localhost:8080/v1/auth"
+    factory<String> { "http://localhost:8080/v1" }
 
     factory<AuthTokenRepository> { AuthTokenRepositoryImpl() }
 
     single {
+        val baseUrl: String = get()
         val authTokenRepository: AuthTokenRepository = get()
         HttpClient(Js) {
             install(Auth) {
@@ -42,20 +46,18 @@ val module = module {
                     }
                     refreshTokens {
                         try {
-                            val response = client.request("$baseUrl/refresh") {
+                            val response = client.request("$baseUrl/auth/refresh") {
                                 method = HttpMethod.Post
                                 headers {
                                     append(HttpHeaders.Accept, ContentType.Application.Json.toString())
                                     append(HttpHeaders.ContentType, ContentType.Application.Json.toString())
                                 }
                                 setBody(RefreshRequest(authTokenRepository.getAuthToken(TokenType.REFRESH) ?: ""))
-                            }.body<AuthTokeDTO>()
-                            authTokenRepository.saveAuthToken(TokenType.ACCESS, response.accessToken)
-                            authTokenRepository.saveAuthToken(TokenType.REFRESH, response.refreshToken)
-                            BearerTokens(accessToken = response.accessToken, refreshToken = response.refreshToken)
-                        } catch (ex: Exception) {
-                            null
-                        }
+                            }.body<LoginDTO>()
+                            authTokenRepository.saveAuthToken(TokenType.ACCESS, response.accessToken ?: "")
+                            authTokenRepository.saveAuthToken(TokenType.REFRESH, response.refreshToken ?: "")
+                            BearerTokens(accessToken = response.accessToken ?: "", refreshToken = response.refreshToken)
+                        } catch (_: Exception) { null }
                     }
                 }
             }
@@ -71,8 +73,14 @@ val module = module {
 
     factory<StudentRepository> { StudentRepositoryImpl(get()) }
 
-    factory<AuthRepository> { AuthRepositoryImpl(get(), get()) }
+    factory<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
 
     factory { HomeScreenManager(get()) }
+
+    factory { IndexScreenManager(get()) }
+
+    factory { SignInAndSignUpScreenManager(get()) }
+
+    factory { SidePanelScreenManager(get()) }
 
 }

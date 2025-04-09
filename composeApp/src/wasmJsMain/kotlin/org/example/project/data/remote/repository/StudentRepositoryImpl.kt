@@ -2,6 +2,7 @@ package org.example.project.data.remote.repository
 
 import io.ktor.client.*
 import io.ktor.client.call.*
+import io.ktor.client.plugins.auth.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import org.example.project.data.remote.response.student.CourseDTO
@@ -9,12 +10,14 @@ import org.example.project.data.remote.response.student.ResponseDTO
 import org.example.project.data.remote.response.student.StudentDTO
 import org.example.project.data.remote.response.student.StudentFailureResponse
 import org.example.project.domain.constant.Response
+import org.example.project.domain.constant.TokenType
 import org.example.project.domain.mapper.student.toCourse
 import org.example.project.domain.mapper.student.toPagingAndSorting
 import org.example.project.domain.mapper.student.toStudent
 import org.example.project.domain.model.student.Course
 import org.example.project.domain.model.student.PagingAndSort
 import org.example.project.domain.model.student.Student
+import org.example.project.domain.repository.AuthTokenRepository
 import org.example.project.domain.repository.StudentRepository
 
 class StudentRepositoryImpl(private val client: HttpClient): StudentRepository {
@@ -46,7 +49,6 @@ class StudentRepositoryImpl(private val client: HttpClient): StudentRepository {
     override suspend fun getStudent(id: Long): Response<Student> {
         return try {
             val response = client.request("$baseUrl/$id") { method = HttpMethod.Get }
-
             if (response.status == HttpStatusCode.NotFound) {
                 val error = response.body<StudentFailureResponse>()
                 return Response.Failure(error.errors)

@@ -23,9 +23,8 @@ import studentmanagementclient.composeapp.generated.resources.detail_icon
 
 @Composable
 fun HomeScreen() {
-
     val appTheme = LocalAppTheme.current
-    val homeScreenManager = GlobalContext.get().get<HomeScreenManager>()
+    val homeScreenManager = remember { GlobalContext.get().get<HomeScreenManager>() }
     val state = homeScreenManager.homeScreenState.value
     var lastScrollIndex by remember { mutableStateOf(0) }
     var addCourse by remember { mutableStateOf(false) }

@@ -9,3 +9,7 @@ fun alert(message: String) {
     getWindow().alert(message)
 }
 
+fun reload() {
+    getWindow().location.reload()
+}
+
