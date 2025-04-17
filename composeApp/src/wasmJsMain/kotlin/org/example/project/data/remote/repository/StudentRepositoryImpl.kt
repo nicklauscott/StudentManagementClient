@@ -2,7 +2,6 @@ package org.example.project.data.remote.repository
 
 import io.ktor.client.*
 import io.ktor.client.call.*
-import io.ktor.client.plugins.auth.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import org.example.project.data.remote.response.student.CourseDTO
@@ -10,26 +9,24 @@ import org.example.project.data.remote.response.student.ResponseDTO
 import org.example.project.data.remote.response.student.StudentDTO
 import org.example.project.data.remote.response.student.StudentFailureResponse
 import org.example.project.domain.constant.Response
-import org.example.project.domain.constant.TokenType
 import org.example.project.domain.mapper.student.toCourse
 import org.example.project.domain.mapper.student.toPagingAndSorting
 import org.example.project.domain.mapper.student.toStudent
 import org.example.project.domain.model.student.Course
 import org.example.project.domain.model.student.PagingAndSort
 import org.example.project.domain.model.student.Student
-import org.example.project.domain.repository.AuthTokenRepository
 import org.example.project.domain.repository.StudentRepository
 
-class StudentRepositoryImpl(private val client: HttpClient): StudentRepository {
+class StudentRepositoryImpl(private val client: HttpClient, baseUrl: String): StudentRepository {
 
-    private val baseUrl = "http://localhost:8080/v1/students"
+    private val studentUrl = "$baseUrl/students"
 
     override suspend fun getStudents(
         page: Int, size: Int, sortBy: String, orderBy: String
     ): Response<Pair<PagingAndSort, List<Student>>> {
         return try {
             val response = client.request(
-                "$baseUrl/advance?page=$page&size=$size&sortBy=$sortBy&orderType=$orderBy"
+                "$studentUrl/advance?page=$page&size=$size&sortBy=$sortBy&orderType=$orderBy"
             ) { method = HttpMethod.Get }
 
             if (response.status != HttpStatusCode.OK) {
@@ -48,7 +45,7 @@ class StudentRepositoryImpl(private val client: HttpClient): StudentRepository {
 
     override suspend fun getStudent(id: Long): Response<Student> {
         return try {
-            val response = client.request("$baseUrl/$id") { method = HttpMethod.Get }
+            val response = client.request("$studentUrl/$id") { method = HttpMethod.Get }
             if (response.status == HttpStatusCode.NotFound) {
                 val error = response.body<StudentFailureResponse>()
                 return Response.Failure(error.errors)
@@ -61,7 +58,7 @@ class StudentRepositoryImpl(private val client: HttpClient): StudentRepository {
 
     override suspend fun getStudentsCourse(id: Long): Response<List<Course>> {
         return try {
-            val response = client.request("$baseUrl/$id/courses") { method = HttpMethod.Get }
+            val response = client.request("$studentUrl/$id/courses") { method = HttpMethod.Get }
 
             if (response.status == HttpStatusCode.NotFound) {
                 val error = response.body<StudentFailureResponse>()
@@ -75,7 +72,7 @@ class StudentRepositoryImpl(private val client: HttpClient): StudentRepository {
 
     override suspend fun createStudent(student: StudentDTO): Response<Student> {
         return try {
-            val response = client.request(baseUrl) {
+            val response = client.request(studentUrl) {
                 method = HttpMethod.Post
                 headers {
                     append(HttpHeaders.Accept, ContentType.Application.Json.toString())
@@ -100,7 +97,7 @@ class StudentRepositoryImpl(private val client: HttpClient): StudentRepository {
 
     override suspend fun updateStudent(student: StudentDTO): Response<Student> {
         return try {
-            val response = client.request("$baseUrl/update") {
+            val response = client.request("$studentUrl/update") {
                 method = HttpMethod.Post
                 headers {
                     append(HttpHeaders.Accept, ContentType.Application.Json.toString())
@@ -126,7 +123,7 @@ class StudentRepositoryImpl(private val client: HttpClient): StudentRepository {
 
     override suspend fun registerCourseForStudent(id: Long, courses: List<Course>): Response<Student> {
         return try {
-            val response = client.request("$baseUrl/$id/courses") {
+            val response = client.request("$studentUrl/$id/courses") {
                 method = HttpMethod.Post
                 headers {
                     append(HttpHeaders.Accept, ContentType.Application.Json.toString())

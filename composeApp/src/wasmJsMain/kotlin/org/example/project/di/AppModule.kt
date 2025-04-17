@@ -28,7 +28,7 @@ import org.koin.dsl.module
 
 val module = module {
 
-    factory<String> { "http://localhost:8080/v1" }
+    factory<String> { "http://localhost:8081/v1" }
 
     factory<AuthTokenRepository> { AuthTokenRepositoryImpl() }
 
@@ -71,7 +71,7 @@ val module = module {
         }
     }
 
-    factory<StudentRepository> { StudentRepositoryImpl(get()) }
+    factory<StudentRepository> { StudentRepositoryImpl(get(), get()) }
 
     factory<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
 

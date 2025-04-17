@@ -18,6 +18,7 @@ class AuthRepositoryImpl(
     private val authTokenRepository: AuthTokenRepository,
     private val baseUrl: String
 ): AuthRepository {
+
     private val authUrl = "$baseUrl/auth"
 
     override suspend fun register(registrationRequest: RegistrationRequest): AuthResponse {
@@ -115,4 +116,5 @@ class AuthRepositoryImpl(
 
     @Serializable
     data class RefreshRequest(val refreshToken: String)
+
 }

@@ -5,6 +5,7 @@ import org.example.project.domain.constant.TokenType
 import org.example.project.domain.repository.AuthTokenRepository
 
 class AuthTokenRepositoryImpl: AuthTokenRepository {
+
     override fun saveAuthToken(type: TokenType, token: String) {
         deleteAuthToken(type)
         localStorage.setItem(type.key, token)
@@ -17,4 +18,5 @@ class AuthTokenRepositoryImpl: AuthTokenRepository {
     override fun deleteAuthToken(type: TokenType) {
         localStorage.removeItem(type.key)
     }
+
 }
